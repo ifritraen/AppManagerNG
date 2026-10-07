@@ -85,9 +85,24 @@ public class AppsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mSwipeRefresh.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.scrollView);
         recyclerView.setLayoutManager(UIUtils.getGridLayoutAt450Dp(mActivity));
-        final TextView emptyView = view.findViewById(android.R.id.empty);
-        emptyView.setText(R.string.no_apps);
-        recyclerView.setEmptyView(emptyView);
+        View emptyView = view.findViewById(android.R.id.empty);
+        if (emptyView != null) {
+            TextView emptyTitle = emptyView.findViewById(R.id.empty_state_title);
+            if (emptyTitle != null) {
+                emptyTitle.setText(R.string.no_apps);
+            } else if (emptyView instanceof TextView) {
+                ((TextView) emptyView).setText(R.string.no_apps);
+            }
+            View emptySummary = emptyView.findViewById(R.id.empty_state_summary);
+            if (emptySummary != null) {
+                emptySummary.setVisibility(View.GONE);
+            }
+            View emptyAction = emptyView.findViewById(R.id.empty_state_action);
+            if (emptyAction != null) {
+                emptyAction.setVisibility(View.GONE);
+            }
+            recyclerView.setEmptyView(emptyView);
+        }
         mProgressIndicator = view.findViewById(R.id.progress_linear);
         mProgressIndicator.setVisibilityAfterHide(View.GONE);
         mProgressIndicator.show();
