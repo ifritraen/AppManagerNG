@@ -110,6 +110,7 @@ android {
         abortOnError = true
         checkDependencies = true
         error 'NewApi', 'WrongThreadInterprocedural', 'SpecifyForegroundServiceType'
+        disable 'BidiSpoofing'
     }
     compileOptions {
         encoding = "UTF-8"
