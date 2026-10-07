@@ -56,8 +56,13 @@ public class NewProfileDialogFragment extends DialogFragment {
         String name = "Untitled profile";
         mEditText.setText(name);
         mEditText.selectAll();
-        TextInputLayout editTextLayout = TextInputLayoutCompat.fromTextInputEditText(mEditText);
-        editTextLayout.setHelperText(requireContext().getText(R.string.input_profile_name_description));
+        TextInputLayout editTextLayout = mDialogView.findViewById(R.id.name_layout);
+        if (editTextLayout == null) {
+            editTextLayout = TextInputLayoutCompat.fromTextInputEditText(mEditText);
+        }
+        if (editTextLayout != null) {
+            editTextLayout.setHelperText(requireContext().getText(R.string.input_profile_name_description));
+        }
         MaterialSpinner spinner = mDialogView.findViewById(R.id.type_selector_spinner);
         ArrayAdapter<CharSequence> spinnerAdapter = SelectedArrayAdapter.createFromResource(requireContext(),
                 R.array.profile_types, io.github.muntashirakon.ui.R.layout.auto_complete_dropdown_item);

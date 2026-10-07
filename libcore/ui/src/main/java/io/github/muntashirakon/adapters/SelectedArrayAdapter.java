@@ -73,17 +73,19 @@ public class SelectedArrayAdapter<T> extends ArrayAdapter<T> {
     @NonNull
     private View setSelected(@NonNull View v) {
         TextView tv;
-        if (mFieldId == 0) {
-            //  If no custom field is assigned, assume the whole resource is a TextView
+        if (mFieldId != 0) {
+            tv = v.findViewById(mFieldId);
+        } else if (v instanceof TextView) {
             tv = (TextView) v;
         } else {
-            //  Otherwise, find the TextView field within the layout
-            tv = v.findViewById(mFieldId);
+            tv = v.findViewById(android.R.id.text1);
         }
-        if (tv.isSelected()) {
-            tv.setSelected(false);
+        if (tv != null) {
+            if (tv.isSelected()) {
+                tv.setSelected(false);
+            }
+            tv.setSelected(true);
         }
-        tv.setSelected(true);
         return v;
     }
 }

@@ -143,7 +143,10 @@ public class ChecksumsDialogFragment extends DialogFragment {
             mViewModel.getChecksumLiveData().observe(getViewLifecycleOwner(), algoHashPair -> {
                 mTextView.setVisibility(View.VISIBLE);
                 mTextView.setText(algoHashPair.second);
-                TextInputLayoutCompat.fromTextInputEditText(mTextView).setHint(algoHashPair.first);
+                com.google.android.material.textfield.TextInputLayout layout = TextInputLayoutCompat.fromTextInputEditText(mTextView);
+                if (layout != null) {
+                    layout.setHint(algoHashPair.first);
+                }
                 AccessibilityUtils.requestAccessibilityFocus(mTextView);
             });
             mViewModel.loadChecksums(mPath);
