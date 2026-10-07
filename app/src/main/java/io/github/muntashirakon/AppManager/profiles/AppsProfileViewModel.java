@@ -10,6 +10,7 @@ import static io.github.muntashirakon.AppManager.utils.PackageUtils.getAppOpName
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.RemoteException;
 import android.os.UserHandleHidden;
@@ -504,15 +505,30 @@ public class AppsProfileViewModel extends AndroidViewModel {
                     if (oldItem.applicationInfo != null) {
                         item.applicationInfo = oldItem.applicationInfo;
                         item.label = oldItem.label;
+                        item.firstInstallTime = oldItem.firstInstallTime;
+                        item.lastUpdateTime = oldItem.lastUpdateTime;
                     }
                 }
             }
             if (item.applicationInfo == null) {
                 try {
-                    item.applicationInfo = PackageManagerCompat.getApplicationInfo(packageName,
+                    PackageInfo pi = PackageManagerCompat.getPackageInfo(packageName,
                             MATCH_UNINSTALLED_PACKAGES | MATCH_DISABLED_COMPONENTS
                                     | MATCH_STATIC_SHARED_AND_SDK_LIBRARIES, userId);
+                    if (pi != null) {
+                        item.applicationInfo = pi.applicationInfo;
+                        item.firstInstallTime = pi.firstInstallTime;
+                        item.lastUpdateTime = pi.lastUpdateTime;
+                    }
                 } catch (RemoteException | PackageManager.NameNotFoundException ignore) {
+                }
+                if (item.applicationInfo == null) {
+                    try {
+                        item.applicationInfo = PackageManagerCompat.getApplicationInfo(packageName,
+                                MATCH_UNINSTALLED_PACKAGES | MATCH_DISABLED_COMPONENTS
+                                        | MATCH_STATIC_SHARED_AND_SDK_LIBRARIES, userId);
+                    } catch (RemoteException | PackageManager.NameNotFoundException ignore) {
+                    }
                 }
                 if (item.applicationInfo != null) {
                     item.label = item.applicationInfo.loadLabel(pm);
@@ -521,6 +537,8 @@ public class AppsProfileViewModel extends AndroidViewModel {
                     Backup backup = BackupUtils.getLatestBackupMetadataFromDbNoLockValidate(packageName);
                     if (backup != null) {
                         item.label = backup.label;
+                        item.firstInstallTime = backup.backupTime;
+                        item.lastUpdateTime = backup.backupTime;
                     }
                 }
                 if (Objects.equals(item.label, packageName)) {
