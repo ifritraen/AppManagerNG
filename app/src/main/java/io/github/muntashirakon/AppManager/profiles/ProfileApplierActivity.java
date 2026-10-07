@@ -23,6 +23,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.json.JSONException;
 
 import java.io.IOException;
+
+import androidx.appcompat.view.ContextThemeWrapper;
+import io.github.muntashirakon.AppManager.settings.Prefs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -266,7 +269,8 @@ public class ProfileApplierActivity extends BaseActivity {
     @NonNull
     private View createApplyReviewView(@NonNull ProfileApplierInfo info,
                                        @NonNull List<Integer> unsupportedOperations) {
-        View view = LayoutInflater.from(this).inflate(R.layout.view_profile_apply_review, null, false);
+        Context dialogContext = new ContextThemeWrapper(this, Prefs.Appearance.getAppTheme());
+        View view = LayoutInflater.from(dialogContext).inflate(R.layout.view_profile_apply_review, null, false);
         ((TextView) view.findViewById(R.id.profile_apply_review_summary))
                 .setText(getProfileApplyReviewSummary(info.profile));
         TextView warning = view.findViewById(R.id.profile_apply_review_warning);
